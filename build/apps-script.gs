@@ -1,10 +1,28 @@
-// Wellknox shoot-status API.
-// Paste this into Extensions > Apps Script of the Google Sheet "Wellknox Oct 2026 shoots",
-// then Deploy > New deployment > Web app (Execute as: Me, Who has access: Anyone).
-// Copy the Web app URL into SHEETS_URL in build/build_calendar.py and rebuild.
+// Wellknox October 2026 shoot status API, bound to the sheet "Wellknox Oct 2026 shoots".
 // Columns: A shoot_id, B place, C date, D status (planned or done), E updated_at.
+var SEED = [
+  ["shoot_id", "place", "date", "status", "updated_at"],
+  ["s-hitech", "Hi-Tech City", "2026-10-09", "planned", ""],
+  ["s-kukatpally", "Kukatpally", "2026-10-12", "planned", ""]
+];
 
-function sheet_() { return SpreadsheetApp.getActiveSpreadsheet().getSheets()[0]; }
+var SHEET_ID = "1uQhY5uvvJCKTgKXeu-HerCdRKexEs6vFkZwyrBIz524";
+
+function sheet_() {
+  var sh = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  if (sh.getLastRow() < 1) {
+    sh.setName("Shoots");
+    sh.getRange(1, 1, SEED.length, 5).setValues(SEED);
+    sh.getRange(2, 3, SEED.length - 1, 1).setNumberFormat("@");
+    sh.getRange(2, 3, SEED.length - 1, 1).setValues(SEED.slice(1).map(function (r) { return [r[2]]; }));
+    sh.getRange(1, 1, 1, 5).setFontWeight("bold");
+    sh.setFrozenRows(1);
+    sh.autoResizeColumns(1, 5);
+  }
+  return sh;
+}
+
+function setup() { sheet_(); }
 
 function read_() {
   var v = sheet_().getDataRange().getValues(), out = [];

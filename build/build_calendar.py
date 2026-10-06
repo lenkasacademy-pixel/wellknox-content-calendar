@@ -7,7 +7,7 @@ T = f"{S}/thumbs"
 OUT = f"{S}/index.html"
 WA = "https://wa.me/917981827087?text="
 # Web app URL from build/apps-script.gs. Empty means the shoot buttons stay hidden.
-SHEETS_URL = ""
+SHEETS_URL = "https://script.google.com/macros/s/AKfycbzjlY2giIQU7cHWO7zZzc6FTaKkujpWM4e24aApAQ-FFMhajAqkR6MGrqbxO7pvGhoT/exec"
 SHOOTS = [
     dict(id="s-hitech", day=9, place="Hi-Tech City"),
     dict(id="s-kukatpally", day=12, place="Kukatpally"),
