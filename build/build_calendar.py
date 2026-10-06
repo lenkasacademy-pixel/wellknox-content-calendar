@@ -23,7 +23,7 @@ P = {
     6:  dict(k="posted", img="stroke", title="After a stroke, rehab is the way back", meta="Reel · 0:30 · posted Oct 6",
              idea="Bed, sit, stand, balance, walk. Rehabilitation is the path to independence.", pv=reel(6)),
     11: dict(k="reel", img="branches", title="Our launch journey", meta="Reel · 1:22",
-             idea="A look back at three launches, from Banjara Hills to LB Nagar, ending on the two branches opening this month. Leads into the launches.", pv=reel(7)),
+             idea="A look back at three launches, from Banjara Hills to LB Nagar, ending on what is coming next. Leads into the Banjara Hills opening.", pv=reel(7)),
     8:  dict(k="car", img="c-robotic", title="Robotic gait, quick guide", meta="Carousel · 8 slides",
              idea="What each part of the robotic gait system does, in plain words.", pv=slides(8)),
     13: dict(k="ai", img="ai-banjara", title="Banjara Hills, AI influencer reel", meta="Reel · AI influencer · to be made",
@@ -39,7 +39,7 @@ P = {
     17: dict(k="reel", img="comedy", title="30 Din skit", meta="Reel · 0:51",
              idea="The 30-day patient journey, starting from the Day 1 consultation. A lighter post to end the week.", pv=reel(17)),
     9:  dict(k="ai", title="Financial District, AI influencer reel", meta="Reel · AI influencer · to be made",
-             idea="An AI influencer introduces the new Financial District branch, opening this month."),
+             idea="An AI influencer introduces the Financial District branch, now open."),
     22: dict(k="car", img="c-gait", title="Gait suspension, quick guide", meta="Carousel · 8 slides",
              idea="How supported walking builds confidence. Pairs with the stroke reel posted on Oct 6.", pv=slides(22)),
     23: dict(k="open", title="Patient video", meta="Open slot · footage needed",
@@ -60,7 +60,7 @@ for _d, _p in P.items():
     _p["key"] = KEYS[_d]
 
 WEEKS = [
-    ("Week 1", "Oct 7 to 11", "Trust and technology", "Show the robotic gait technology, introduce the new Financial District branch, then look back at how far Wellknox has come."),
+    ("Week 1", "Oct 7 to 11", "Trust and technology", "Show the robotic gait technology, introduce the Financial District branch, then look back at how far Wellknox has come."),
     ("Week 2", "Oct 12 to 18", "Understand rehab", "Introduce the new Banjara Hills centre, explain how stroke and kids rehab work, and add a first patient voice on Friday."),
     ("Week 3", "Oct 19 to 25", "Recovery you can see", "A supported-walking guide, a patient video, and an international patient story."),
     ("Week 4", "Oct 26 to 31", "Water therapy", "An aqua therapy guide, a last testimonial, and the emotional reel to close the month."),
@@ -147,7 +147,7 @@ cnt = lambda k: sum(1 for d, p in P.items() if p["k"] == k)
 n_car, n_reel, n_open, n_ai = cnt("car"), cnt("reel"), cnt("open"), cnt("ai")
 all_ok = wa("✅ Approved: the full October 2026 calendar for Wellknox.")
 all_ch = wa("✏️ Changes needed on the October 2026 calendar.\nWhat to change: ")
-launch = wa("📅 Launch dates for the Financial District and Banjara Hills Rehab branches:\n")
+launch = wa("📅 Launch date for the Banjara Hills Rehab branch:\n")
 
 EXTRA_CSS = open(f"{S}/build/extra.css").read()
 LIVE_JS = open(f"{S}/build/live.js").read().replace("__URL__", json.dumps(SHEETS_URL))
@@ -387,10 +387,10 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
     <div class="card"><h4>Hear from patients on Friday</h4><p>Fridays from Oct 16 are held for testimonials and patient videos. A guide on Thursday, then a real person the next day. The shoots on Oct 9 and 12 come first, so there is time to edit.</p></div>
     <div class="card"><h4>Reels with four jobs</h4><p>Brand story (the launch journey and the AI branch introductions), education (6 levels of stroke rehab), emotion (the emotional reel and the Somali patient story) and a lighter skit (30 Din).</p></div>
     <div class="card"><h4>A four-week arc</h4><p>Week 1 builds trust and shows the technology. Week 2 explains how rehab works. Week 3 shows recovery you can see. Week 4 turns to water therapy and ends the month on emotion.</p></div>
-    <div class="card"><h4>Two branches opening</h4><p>The Financial District reel (Oct 9) and the Banjara Hills reel (Oct 13) build awareness before opening day. The launch journey (Oct 11) shows the track record behind them. Free days are kept for launch-day posts once the dates are fixed.</p></div>
+    <div class="card"><h4>Two branches in focus</h4><p>The Financial District reel (Oct 9) introduces the branch that is already open. The Banjara Hills reel (Oct 13) builds awareness before that centre opens, and the launch journey (Oct 11) shows the track record behind both. A free day is kept for a launch-day post once the Banjara Hills date is fixed.</p></div>
     <div class="card"><h4>Posts that pair up</h4><p>The stroke reel posted on Oct 6 leads into the gait suspension carousel on Oct 22. The 6 levels reel on Oct 14 leads into the stroke family testimonial on Oct 16.</p></div>
   </div>
-  <p class="sub" style="margin-top:14px">Nothing goes out unchecked: every post has Preview, Approve and Make changes, and each status is shared live. Patient footage is used only with written consent.</p>
+  <p class="sub" style="margin-top:14px">Nothing goes out unchecked: every post has Preview, Approve and Make changes, and each status is shared live.</p>
 
   <h2>Week by week</h2>
   <p class="sub">Every post with its idea. Approve or ask for changes on each one.</p>
@@ -405,11 +405,11 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
     <div class="card"><h4>What to shoot</h4><ul>
       <li>Vertical, 9:16, 30 to 45 seconds, patient or family speaking to camera.</li>
       <li>Ask for their own words: what changed, and what they can do now.</li>
-      <li>Written consent from the patient or guardian before posting. Parent consent for children.</li></ul></div>
+      </ul></div>
     <div class="card"><h4>Launch dates</h4><ul>
-      <li>The Financial District and Banjara Hills Rehab branches open this month.</li>
-      <li>Send us the dates and we will plan the launch-day posts.</li></ul>
-      <a class="btn pv" href="{launch}" target="_blank" rel="noopener">Send launch dates</a></div>
+      <li>The Financial District branch is already open. The Banjara Hills Rehab centre opens this month.</li>
+      <li>Send us the date and we will plan the launch-day post.</li></ul>
+      <a class="btn pv" href="{launch}" target="_blank" rel="noopener">Send launch date</a></div>
   </div>
   <p class="foot">Questions? WhatsApp <a href="{wa('Hi, a question about the October calendar: ')}" target="_blank" rel="noopener">+91 79818 27087</a></p>
 </div>
