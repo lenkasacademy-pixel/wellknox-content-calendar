@@ -1,0 +1,50 @@
+/* Status colours: approved (green), changes requested (red), uploaded (blue). */
+:root {
+  --approved: #1a7f43; --approved-soft: #dff3e6; --approved-ink: #ffffff;
+  --uploaded: #1f5fd6; --uploaded-soft: #e0eafc; --uploaded-ink: #ffffff;
+  --changes: #c0392b; --changes-soft: #fbe6e3; --changes-ink: #ffffff;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --approved: #5fd38d; --approved-soft: #163a27; --approved-ink: #08210f;
+  --uploaded: #8db4ff; --uploaded-soft: #1b2c52; --uploaded-ink: #0b1b3d;
+  --changes: #ff8f85; --changes-soft: #43201d; --changes-ink: #3a0d08; } }
+:root[data-theme="dark"] {
+  --approved: #5fd38d; --approved-soft: #163a27; --approved-ink: #08210f;
+  --uploaded: #8db4ff; --uploaded-soft: #1b2c52; --uploaded-ink: #0b1b3d;
+  --changes: #ff8f85; --changes-soft: #43201d; --changes-ink: #3a0d08; }
+
+.btn.ok { background: var(--surface); border-color: var(--approved); color: var(--approved); }
+.btn.ch { background: var(--surface); border-color: var(--changes); color: var(--changes); }
+.btn.up { background: var(--surface); border-color: var(--uploaded); color: var(--uploaded); }
+.btn.ok.solid, .btn.ok[data-status="approved"], .row[data-status="approved"] .btn.ok { background: var(--approved); color: var(--approved-ink); }
+.btn.ch[data-status="changes"], .row[data-status="changes"] .btn.ch { background: var(--changes); color: var(--changes-ink); }
+.row[data-status="uploaded"] .btn.up { background: var(--uploaded); color: var(--uploaded-ink); }
+.lnk { background: none; border: 0; color: var(--muted); text-decoration: underline; font: 600 13px var(--body); cursor: pointer; padding: 8px 6px; }
+.lnk[hidden] { display: none; }
+
+.spill, .gst { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+.spill[data-s="pending"], .gst[data-s="pending"] { background: var(--slate-soft); color: var(--slate); }
+.spill[data-s="approved"], .gst[data-s="approved"] { background: var(--approved); color: var(--approved-ink); }
+.spill[data-s="changes"], .gst[data-s="changes"] { background: var(--changes); color: var(--changes-ink); }
+.spill[data-s="uploaded"], .gst[data-s="uploaded"] { background: var(--uploaded); color: var(--uploaded-ink); }
+.gst { display: inline-block; align-self: flex-start; margin-top: 2px; font-size: 10px; padding: 1px 7px; }
+.gst[data-s="pending"] { display: none; }
+.row[data-status="approved"] { box-shadow: inset 5px 0 0 var(--approved); }
+.row[data-status="changes"] { box-shadow: inset 5px 0 0 var(--changes); }
+.row[data-status="uploaded"] { box-shadow: inset 5px 0 0 var(--uploaded); }
+.chip[data-status="approved"] .gth, .chip[data-status="approved"] .ph { box-shadow: 0 0 0 3px var(--approved); }
+.chip[data-status="changes"] .gth, .chip[data-status="changes"] .ph { box-shadow: 0 0 0 3px var(--changes); }
+.chip[data-status="uploaded"] .gth, .chip[data-status="uploaded"] .ph { box-shadow: 0 0 0 3px var(--uploaded); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 14px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+
+.sh-head .add { margin-left: auto; }
+.plus { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: var(--surface); font-size: 18px; line-height: 1; }
+.addform { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+.addform[hidden] { display: none; }
+.addform label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.addform input { font: 500 15px var(--body); min-height: 40px; padding: 0 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--ink); }
+#ash-msg { font-size: 13px; color: var(--changes); flex-basis: 100%; }
+#ash-msg:empty { display: none; }

@@ -22,8 +22,8 @@ def slides(d): return dict(t="slides", s=[f"previews/d{d:02d}-{n}.mp4" for n in 
 P = {
     6:  dict(k="posted", img="stroke", title="After a stroke, rehab is the way back", meta="Reel · 0:30 · posted Oct 6",
              idea="Bed, sit, stand, balance, walk. Rehabilitation is the path to independence.", pv=reel(6)),
-    7:  dict(k="reel", img="branches", title="Our launch journey", meta="Reel · 1:22",
-             idea="A look back at three launches, from Banjara Hills to LB Nagar, ending on the two branches opening this month. Sets up the month.", pv=reel(7)),
+    11: dict(k="reel", img="branches", title="Our launch journey", meta="Reel · 1:22",
+             idea="A look back at three launches, from Banjara Hills to LB Nagar, ending on the two branches opening this month. Leads into the launches.", pv=reel(7)),
     8:  dict(k="car", img="c-robotic", title="Robotic gait, quick guide", meta="Carousel · 8 slides",
              idea="What each part of the robotic gait system does, in plain words.", pv=slides(8)),
     13: dict(k="ai", img="ai-banjara", title="Banjara Hills, AI influencer reel", meta="Reel · AI influencer · to be made",
@@ -54,8 +54,13 @@ P = {
 KIND = {"car": "Carousel", "reel": "Reel", "open": "Open slot", "posted": "Posted", "ai": "AI reel"}
 NOUN = {"car": "Carousel", "reel": "Reel", "open": "Slot", "posted": "Reel", "ai": "AI reel"}
 
+KEYS = {6: "stroke", 8: "robotic", 9: "ai-fd", 11: "launch", 13: "ai-bh", 14: "levels", 15: "kids", 16: "slot-16",
+        17: "30din", 22: "gait", 23: "slot-23", 24: "somali", 29: "aqua", 30: "slot-30", 31: "emotional"}
+for _d, _p in P.items():
+    _p["key"] = KEYS[_d]
+
 WEEKS = [
-    ("Week 1", "Oct 7 to 11", "Trust and technology", "Open with how far Wellknox has come, show the robotic gait technology, and introduce the new Financial District branch."),
+    ("Week 1", "Oct 7 to 11", "Trust and technology", "Show the robotic gait technology, introduce the new Financial District branch, then look back at how far Wellknox has come."),
     ("Week 2", "Oct 12 to 18", "Understand rehab", "Introduce the new Banjara Hills centre, explain how stroke and kids rehab work, and add a first patient voice on Friday."),
     ("Week 3", "Oct 19 to 25", "Recovery you can see", "A supported-walking guide, a patient video, and an international patient story."),
     ("Week 4", "Oct 26 to 31", "Water therapy", "An aqua therapy guide, a last testimonial, and the emotional reel to close the month."),
@@ -72,6 +77,8 @@ def change_link(d, p): return wa(f"✏️ Changes needed\n{label(d, p)}\nWhat to
 PLAY = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>'
 TICK = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 PEN = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 20l4.2-1 10-10a2 2 0 0 0-2.8-2.8l-10 10L4 20z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>'
+
+UP = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 16V5m0 0L7.5 9.5M12 5l4.5 4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 def thumb(p, cls="th"):
     if p["k"] == "open":
@@ -90,14 +97,16 @@ for d in range(1, 32):
     cls = "cell" + (" past" if past else "") + (" has " + p["k"] if p else "")
     inner = f'<div class="dn">{d}</div>'
     if p:
-        inner += (f'<a class="chip {p["k"]}" href="#d{d}">{thumb(p, "gth")}'
+        pk = "" if p["k"] == "posted" else f' data-pkey="{p["key"]}" data-status="pending"'
+        pill = "" if p["k"] == "posted" else '<span class="gst" data-pill></span>'
+        inner += (f'<a class="chip {p["k"]}" href="#d{d}"{pk}>{thumb(p, "gth")}'
                   f'<span class="ct"><span class="badge {p["k"]}">{KIND[p["k"]]}</span>'
-                  f'<span class="gt">{html.escape(p["title"])}</span></span></a>')
+                  f'<span class="gt">{html.escape(p["title"])}</span>{pill}</span></a>')
     for sh in SHOOTS:
         if sh["day"] == d:
             inner += (f'<a class="gshoot" data-sid="{sh["id"]}" href="#shoots"><i class="pip"></i>'
                       f'<span>Shoot · {sh["place"]}</span><span class="gs-t">Planned</span></a>')
-    cells.append(f'<div class="{cls}">{inner}</div>')
+    cells.append(f'<div class="{cls}" data-day="{d}">{inner}</div>')
 while len(cells) % 7: cells.append('<div class="cell blank"></div>')
 grid = "".join(cells)
 dow_head = "".join(f"<div>{d}</div>" for d in DOW)
@@ -107,16 +116,21 @@ def row(d, p):
     acts = []
     if p.get("pv"):
         acts.append(f'<button class="btn pv" type="button" data-day="{d}">{PLAY}Preview</button>')
-    if p["k"] != "posted":
-        acts.append(f'<a class="btn ok" href="{approve_link(d, p)}" target="_blank" rel="noopener">{TICK}Approve</a>')
-        acts.append(f'<a class="btn ch" href="{change_link(d, p)}" target="_blank" rel="noopener">{PEN}Make changes</a>')
+    live = p["k"] != "posted"
+    if live:
+        acts.append(f'<a class="btn ok" data-act="approved" href="{approve_link(d, p)}" target="_blank" rel="noopener">{TICK}<span class="lb">Approve</span></a>')
+        acts.append(f'<a class="btn ch" data-act="changes" href="{change_link(d, p)}" target="_blank" rel="noopener">{PEN}<span class="lb">Make changes</span></a>')
+        acts.append(f'<button class="btn up" type="button" data-act="uploaded">{UP}<span class="lb">Mark uploaded</span></button>')
+        acts.append('<button class="lnk" type="button" data-act="pending" hidden>Reset</button>')
     if p["k"] == "open":
         acts.insert(0, '<span class="nopv">Preview opens once footage is in</span>')
     if p["k"] == "ai":
         acts.insert(0, '<span class="nopv">Preview opens once the reel is made</span>')
-    return (f'<article class="row {p["k"]}" id="d{d}">'
+    pk = f' data-pkey="{p["key"]}" data-status="pending"' if live else ""
+    pill = '<span class="spill" data-pill data-s="pending">Awaiting approval</span>' if live else ""
+    return (f'<article class="row {p["k"]}" id="d{d}"{pk}>'
             f'<div class="when"><b>{d}</b><span>{dow(d)}</span></div>{thumb(p)}'
-            f'<div class="body"><div class="top"><span class="badge {p["k"]}">{KIND[p["k"]]}</span><span class="meta">{html.escape(p["meta"])}</span></div>'
+            f'<div class="body"><div class="top"><span class="badge {p["k"]}">{KIND[p["k"]]}</span>{pill}<span class="meta">{html.escape(p["meta"])}</span></div>'
             f'<h4>{html.escape(p["title"])}</h4><p>{html.escape(p["idea"])}</p>'
             f'<div class="acts">{"".join(acts)}</div></div></article>')
 
@@ -135,9 +149,12 @@ all_ok = wa("✅ Approved: the full October 2026 calendar for Wellknox.")
 all_ch = wa("✏️ Changes needed on the October 2026 calendar.\nWhat to change: ")
 launch = wa("📅 Launch dates for the Financial District and Banjara Hills Rehab branches:\n")
 
+EXTRA_CSS = open(f"{S}/build/extra.css").read()
+LIVE_JS = open(f"{S}/build/live.js").read().replace("__URL__", json.dumps(SHEETS_URL))
+
 shoot_cards = "".join(
-    f'<div class="shoot" data-sid="{sh["id"]}"><div class="sd"><b>{sh["day"]}</b><span>{dow(sh["day"])}</span></div>'
-    f'<div class="sb"><h4>{sh["place"]}</h4><p class="ss" data-status>Planned</p></div>'
+    f'<div class="shoot" data-sid="{sh["id"]}" data-date="2026-10-{sh["day"]:02d}"><div class="sd"><b>{sh["day"]}</b><span>{dow(sh["day"])}</span></div>'
+    f'<div class="sb"><h4>{sh["place"]}</h4><p class="ss" data-sstat>Planned</p></div>'
     f'<button class="btn sbtn" type="button">Mark shoot done</button></div>'
     for sh in SHOOTS)
 
@@ -266,6 +283,8 @@ img.th.reel, img.th.posted, img.th.ai {{ aspect-ratio: 9 / 16; }} img.th.car {{ 
 .foot {{ margin-top: 36px; color: var(--muted); font-size: 14px; }}
 .foot a {{ color: var(--teal); font-weight: 700; }}
 
+{EXTRA_CSS}
+
 dialog {{ width: min(460px, calc(100vw - 24px)); max-height: 94vh; padding: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--ink); overflow: hidden; }}
 dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
 .dh {{ display: flex; align-items: center; gap: 12px; padding: 12px 14px 12px 18px; border-bottom: 1px solid var(--line); }}
@@ -296,7 +315,7 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
 <div class="wrap">
   <div class="kick">Wellknox · content plan</div>
   <h1>October 2026</h1>
-  <p class="lede">Open Preview to watch each post. Then tap Approve or Make changes. Both open WhatsApp with the post already filled in, so you only press send.</p>
+  <p class="lede">Open Preview to watch each post. Tap Approve or Make changes, and both open WhatsApp with the post filled in, so you only press send. When a post goes live, tap Mark uploaded.</p>
   <div class="stats">
     <div class="stat"><span class="dot car"></span><b>{n_car}</b> carousels, Thursdays</div>
     <div class="stat"><span class="dot reel"></span><b>{n_reel}</b> reels</div>
@@ -304,13 +323,27 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
     <div class="stat"><span class="dot open"></span><b>{n_open}</b> open slots, Fridays</div>
     <div class="stat"><span class="dot posted"></span><b>1</b> posted Oct 6</div>
   </div>
+  <div class="legend" aria-label="Status colours">
+    <span><i style="background:var(--slate)"></i>Awaiting approval</span>
+    <span><i style="background:var(--approved)"></i>Approved</span>
+    <span><i style="background:var(--changes)"></i>Changes requested</span>
+    <span><i style="background:var(--uploaded)"></i>Uploaded</span>
+  </div>
   <div class="allacts">
-    <a class="btn ok" href="{all_ok}" target="_blank" rel="noopener">{TICK}Approve the whole month</a>
+    <a class="btn ok solid" href="{all_ok}" target="_blank" rel="noopener">{TICK}Approve the whole month</a>
     <a class="btn ch" href="{all_ch}" target="_blank" rel="noopener">{PEN}Make changes</a>
   </div>
 
   <section class="shoots" id="shoots" aria-labelledby="sh-h">
-    <div class="sh-head"><h2 id="sh-h">Shoots this month</h2><span class="live" id="live" role="status"></span></div>
+    <div class="sh-head"><h2 id="sh-h">Shoots this month</h2><span class="live" id="live" role="status"></span>
+      <button class="btn add" id="addshoot" type="button" aria-expanded="false" aria-controls="addform"><span class="plus" aria-hidden="true">+</span>Add shoot</button></div>
+    <form class="addform" id="addform" hidden>
+      <label>Place<input id="ash-place" maxlength="40" required placeholder="e.g. Madhapur"></label>
+      <label>Date<input id="ash-date" type="date" min="2026-10-01" max="2026-10-31" required></label>
+      <button class="btn ok solid" type="submit">Add shoot</button>
+      <button class="btn" type="button" id="ash-cancel">Cancel</button>
+      <span id="ash-msg" role="status"></span>
+    </form>
     <div class="sh-grid">{shoot_cards}</div>
   </section>
 
@@ -350,7 +383,7 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
 <script>
 (function () {{
   var PV = {json.dumps(pv_data)};
-  var LINKS = {json.dumps({str(d): dict(ok=approve_link(d, p), ch=change_link(d, p)) for d, p in P.items() if p["k"] != "posted"})};
+  var LINKS = {json.dumps({str(d): dict(ok=approve_link(d, p), ch=change_link(d, p), key=p["key"]) for d, p in P.items() if p["k"] != "posted"})};
   var dlg = document.getElementById("pv"), body = document.getElementById("pvb"), foot = document.getElementById("pvf");
   function close() {{ try {{ dlg.close(); }} catch (e) {{}} }}
   function clear() {{ body.querySelectorAll("video").forEach(function (v) {{ v.pause(); v.removeAttribute("src"); v.load(); }}); body.textContent = ""; foot.textContent = ""; }}
@@ -384,8 +417,8 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
     }}
     var L = LINKS[day];
     if (L) {{
-      [["ok", "Approve", "btn ok"], ["ch", "Make changes", "btn ch"]].forEach(function (x) {{
-        var a = document.createElement("a"); a.className = x[2]; a.textContent = x[1]; a.href = L[x[0]]; a.target = "_blank"; a.rel = "noopener"; foot.appendChild(a);
+      [["ok", "Approve", "btn ok", "approved"], ["ch", "Make changes", "btn ch", "changes"]].forEach(function (x) {{
+        var a = document.createElement("a"); a.className = x[2]; a.setAttribute("data-pkey", L.key); a.setAttribute("data-act", x[3]); a.textContent = x[1]; a.href = L[x[0]]; a.target = "_blank"; a.rel = "noopener"; foot.appendChild(a);
       }});
     }}
   }}
@@ -396,49 +429,7 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
 }})();
 </script>
 <script>
-(function () {{
-  var URL_ = {json.dumps(SHEETS_URL)}, KEY = "wk-shoots-v1", state = {{}};
-  try {{ state = JSON.parse(localStorage.getItem(KEY) || "{{}}"); }} catch (e) {{}}
-  var live = document.getElementById("live");
-  function save() {{ try {{ localStorage.setItem(KEY, JSON.stringify(state)); }} catch (e) {{}} }}
-  function fmt(iso) {{ try {{ return new Date(iso).toLocaleString("en-IN", {{ day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }}); }} catch (e) {{ return ""; }} }}
-  function render() {{
-    document.querySelectorAll("[data-sid]").forEach(function (el) {{
-      var s = state[el.getAttribute("data-sid")] || {{}}, done = s.status === "done";
-      el.classList.toggle("done", done);
-      var st = el.querySelector("[data-status]"); if (st) st.textContent = done ? "Shoot done" + (s.at ? " · " + fmt(s.at) : "") : "Planned";
-      var g = el.querySelector(".gs-t"); if (g) g.textContent = done ? "Done" : "Planned";
-      var b = el.querySelector(".sbtn"); if (b) b.textContent = done ? "Undo" : "Mark shoot done";
-    }});
-  }}
-  function setLive(t, ok) {{ live.textContent = t; live.className = "live" + (ok ? " on" : ""); }}
-  function apply(rows) {{ rows.forEach(function (r) {{ state[r.id] = {{ status: r.status, at: r.at }}; }}); save(); render(); setLive("Live · updated " + fmt(new Date().toISOString()), true); }}
-  function pull() {{
-    return fetch(URL_, {{ cache: "no-store" }}).then(function (r) {{ return r.json(); }})
-      .then(function (j) {{ if (j && j.shoots) apply(j.shoots); }})
-      .catch(function () {{ setLive("Offline, showing the last saved status", false); }});
-  }}
-  function push(id, status) {{
-    state[id] = {{ status: status, at: status === "done" ? new Date().toISOString() : "" }}; save(); render();
-    fetch(URL_, {{ method: "POST", headers: {{ "Content-Type": "text/plain;charset=utf-8" }}, body: JSON.stringify({{ id: id, status: status }}) }})
-      .then(function (r) {{ return r.json(); }})
-      .then(function (j) {{ if (j && j.shoots) apply(j.shoots); else setLive("The sheet did not accept that change", false); }})
-      .catch(function () {{ setLive("Could not reach the sheet. Try again.", false); }});
-  }}
-  if (!URL_) {{
-    document.querySelectorAll(".shoot").forEach(function (c) {{ c.classList.add("nobtn"); var b = c.querySelector(".sbtn"); if (b) b.remove(); }});
-    return;
-  }}
-  document.querySelectorAll(".sbtn").forEach(function (b) {{
-    b.addEventListener("click", function () {{
-      var id = b.closest("[data-sid]").getAttribute("data-sid");
-      push(id, (state[id] && state[id].status === "done") ? "planned" : "done");
-    }});
-  }});
-  render(); setLive("Connecting to the sheet", false); pull();
-  setInterval(function () {{ if (!document.hidden) pull(); }}, 8000);
-  document.addEventListener("visibilitychange", function () {{ if (!document.hidden) pull(); }});
-}})();
+{LIVE_JS}
 </script>
 """
 open(OUT, "w").write(page)
