@@ -40,12 +40,16 @@ P = {
              idea="The 30-day patient journey, starting from the Day 1 consultation. A lighter post to end the week.", pv=reel(17)),
     9:  dict(k="ai", title="Financial District, AI influencer reel", meta="Reel · AI influencer · to be made",
              idea="An AI influencer introduces the Financial District branch, now open."),
+    20: dict(k="open", title="Open slot", meta="Open slot · footage needed",
+             idea="Held for a testimonial or patient video."),
     22: dict(k="car", img="c-gait", title="Gait suspension, quick guide", meta="Carousel · 8 slides",
              idea="How supported walking builds confidence. Pairs with the stroke reel posted on Oct 6.", pv=slides(22)),
     23: dict(k="open", title="Patient video", meta="Open slot · footage needed",
              idea="A standing or walking milestone, right after Thursday's gait suspension carousel."),
     24: dict(k="reel", img="somali", title="A mother's words, from Somalia", meta="Reel · 0:40",
              idea="An international patient story: a mother on her daughter's therapy at Wellknox.", pv=reel(24)),
+    27: dict(k="open", title="Open slot", meta="Open slot · footage needed",
+             idea="Held for a testimonial or patient video."),
     29: dict(k="car", img="c-aqua", title="Aqua therapy, quick guide", meta="Carousel · 8 slides",
              idea="Let the water carry you: why water exercise is gentler on sore joints.", pv=slides(29)),
     30: dict(k="open", title="Testimonial", meta="Open slot · footage needed",
@@ -55,7 +59,7 @@ KIND = {"car": "Carousel", "reel": "Reel", "open": "Open slot", "posted": "Poste
 NOUN = {"car": "Carousel", "reel": "Reel", "open": "Slot", "posted": "Reel", "ai": "AI reel"}
 
 KEYS = {6: "stroke", 8: "robotic", 9: "ai-fd", 11: "launch", 13: "ai-bh", 14: "levels", 15: "kids", 16: "slot-16",
-        17: "30din", 22: "gait", 23: "slot-23", 24: "somali", 29: "aqua", 30: "slot-30", 31: "emotional"}
+        17: "30din", 20: "slot-20", 22: "gait", 23: "slot-23", 24: "somali", 27: "slot-27", 29: "aqua", 30: "slot-30", 31: "emotional"}
 for _d, _p in P.items():
     _p["key"] = KEYS[_d]
 
@@ -347,7 +351,7 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
     <div class="stat"><span class="dot car"></span><b>{n_car}</b> carousels, Thursdays</div>
     <div class="stat"><span class="dot reel"></span><b>{n_reel}</b> reels</div>
     <div class="stat"><span class="dot ai"></span><b>{n_ai}</b> AI influencer reels</div>
-    <div class="stat"><span class="dot open"></span><b>{n_open}</b> open slots, Fridays</div>
+    <div class="stat"><span class="dot open"></span><b>{n_open}</b> open slots</div>
     <div class="stat"><span class="dot posted"></span><b>1</b> posted Oct 6</div>
   </div>
   <div class="legend" aria-label="Status colours">
@@ -384,7 +388,7 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
   <p class="sub">Why the month is laid out this way.</p>
   <div class="cols">
     <div class="card"><h4>Learn on Thursday</h4><p>One carousel every Thursday: robotic gait, kids rehab, gait suspension and aqua therapy. Each one is a short guide families can save and share, and it explains a therapy in plain words before anyone has to ask.</p></div>
-    <div class="card"><h4>Hear from patients on Friday</h4><p>Fridays from Oct 16 are held for testimonials and patient videos. A guide on Thursday, then a real person the next day. The shoots on Oct 9 and 12 come first, so there is time to edit.</p></div>
+    <div class="card"><h4>Hear from patients on Friday</h4><p>Fridays from Oct 16, plus Oct 20 and 27, are held for testimonials and patient videos. A guide on Thursday, then a real person the next day. The shoots on Oct 9 and 12 come first, so there is time to edit.</p></div>
     <div class="card"><h4>Reels with four jobs</h4><p>Brand story (the launch journey and the AI branch introductions), education (6 levels of stroke rehab), emotion (the emotional reel and the Somali patient story) and a lighter skit (30 Din).</p></div>
     <div class="card"><h4>A four-week arc</h4><p>Week 1 builds trust and shows the technology. Week 2 explains how rehab works. Week 3 shows recovery you can see. Week 4 turns to water therapy and ends the month on emotion.</p></div>
     <div class="card"><h4>Two branches in focus</h4><p>The Financial District reel (Oct 9) introduces the branch that is already open. The Banjara Hills reel (Oct 13) builds awareness before that centre opens, and the launch journey (Oct 11) shows the track record behind both. A free day is kept for a launch-day post once the Banjara Hills date is fixed.</p></div>
@@ -396,11 +400,12 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
   <p class="sub">Every post with its idea. Approve or ask for changes on each one.</p>
   {"".join(agenda)}
 
-  <h2>For the 3 open slots</h2>
+  <h2>For the open slots</h2>
   <div class="cols">
     <div class="card"><h4>What we need from you</h4><ul>
+      <li>Open slots: Fri 16, Tue 20, Fri 23, Tue 27 and Fri 30 Oct.</li>
       <li>Raw clips by Monday: 12, 19 and 26 Oct.</li>
-      <li>We edit Tuesday to Thursday and post on Friday: 16, 23 and 30 Oct.</li>
+      <li>We edit within two days of receiving them.</li>
       <li>If a slot is not ready, we move a finished reel into it.</li></ul></div>
     <div class="card"><h4>What to shoot</h4><ul>
       <li>Vertical, 9:16, 30 to 45 seconds, patient or family speaking to camera.</li>
