@@ -6,6 +6,12 @@ S = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 T = f"{S}/thumbs"
 OUT = f"{S}/index.html"
 WA = "https://wa.me/917981827087?text="
+# Web app URL from build/apps-script.gs. Empty means the shoot buttons stay hidden.
+SHEETS_URL = ""
+SHOOTS = [
+    dict(id="s-hitech", day=9, place="Hi-Tech City"),
+    dict(id="s-kukatpally", day=12, place="Kukatpally"),
+]
 
 def img(n):
     return "data:image/jpeg;base64," + base64.b64encode(open(f"{T}/{n}.jpg", "rb").read()).decode()
@@ -20,19 +26,19 @@ P = {
              idea="A look back at three launches, from Banjara Hills to LB Nagar, ending on the two branches opening this month. Sets up the month.", pv=reel(7)),
     8:  dict(k="car", img="c-robotic", title="Robotic gait, quick guide", meta="Carousel · 8 slides",
              idea="What each part of the robotic gait system does, in plain words.", pv=slides(8)),
-    9:  dict(k="ai", img="ai-banjara", title="Banjara Hills, AI influencer reel", meta="Reel · AI influencer · to be made",
+    13: dict(k="ai", img="ai-banjara", title="Banjara Hills, AI influencer reel", meta="Reel · AI influencer · to be made",
              idea="An AI influencer introduces the new Banjara Hills Rehab centre, coming this month."),
-    10: dict(k="reel", img="emotional", title="Emotional reel", meta="Reel · 0:40",
-             idea="Therapists and patients mid-session. A warm weekend post.", pv=reel(10)),
-    13: dict(k="reel", img="levels", title="6 levels of stroke rehab", meta="Reel · 1:03",
+    31: dict(k="reel", img="emotional", title="Emotional reel", meta="Reel · 0:40",
+             idea="Therapists and patients mid-session. A warm post to close the month.", pv=reel(10)),
+    14: dict(k="reel", img="levels", title="6 levels of stroke rehab", meta="Reel · 1:03",
              idea="Rehab is not one exercise. Six levels, from assessment to the home programme.", pv=reel(13)),
     15: dict(k="car", img="c-kids", title="Kids rehab, quick guide", meta="Carousel · 8 slides",
              idea="For parents: how rehab works for little ones.", pv=slides(15)),
     16: dict(k="open", title="Testimonial", meta="Open slot · footage needed",
-             idea="A stroke patient's family. Sits right after Tuesday's six-levels explainer."),
+             idea="A stroke patient's family. Sits right after Wednesday's six-levels explainer."),
     17: dict(k="reel", img="comedy", title="30 Din skit", meta="Reel · 0:51",
              idea="The 30-day patient journey, starting from the Day 1 consultation. A lighter post to end the week.", pv=reel(17)),
-    20: dict(k="ai", title="Financial District, AI influencer reel", meta="Reel · AI influencer · to be made",
+    9:  dict(k="ai", title="Financial District, AI influencer reel", meta="Reel · AI influencer · to be made",
              idea="An AI influencer introduces the new Financial District branch, opening this month."),
     22: dict(k="car", img="c-gait", title="Gait suspension, quick guide", meta="Carousel · 8 slides",
              idea="How supported walking builds confidence. Pairs with the stroke reel posted on Oct 6.", pv=slides(22)),
@@ -49,10 +55,10 @@ KIND = {"car": "Carousel", "reel": "Reel", "open": "Open slot", "posted": "Poste
 NOUN = {"car": "Carousel", "reel": "Reel", "open": "Slot", "posted": "Reel", "ai": "AI reel"}
 
 WEEKS = [
-    ("Week 1", "Oct 7 to 11", "Trust and technology", "Open with how far Wellknox has come, show the robotic gait technology, and introduce the new Banjara Hills centre."),
-    ("Week 2", "Oct 12 to 18", "Understand rehab", "Explain how stroke and kids rehab work, with a first patient voice on Friday."),
-    ("Week 3", "Oct 19 to 25", "Recovery you can see", "A Financial District introduction, a supported-walking guide, then patient proof."),
-    ("Week 4", "Oct 26 to 31", "Water therapy", "An aqua therapy guide, then a last testimonial to close the month."),
+    ("Week 1", "Oct 7 to 11", "Trust and technology", "Open with how far Wellknox has come, show the robotic gait technology, and introduce the new Financial District branch."),
+    ("Week 2", "Oct 12 to 18", "Understand rehab", "Introduce the new Banjara Hills centre, explain how stroke and kids rehab work, and add a first patient voice on Friday."),
+    ("Week 3", "Oct 19 to 25", "Recovery you can see", "A supported-walking guide, a patient video, and an international patient story."),
+    ("Week 4", "Oct 26 to 31", "Water therapy", "An aqua therapy guide, a last testimonial, and the emotional reel to close the month."),
 ]
 WK_DAYS = [(7, 11), (12, 18), (19, 25), (26, 31)]
 DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -87,6 +93,10 @@ for d in range(1, 32):
         inner += (f'<a class="chip {p["k"]}" href="#d{d}">{thumb(p, "gth")}'
                   f'<span class="ct"><span class="badge {p["k"]}">{KIND[p["k"]]}</span>'
                   f'<span class="gt">{html.escape(p["title"])}</span></span></a>')
+    for sh in SHOOTS:
+        if sh["day"] == d:
+            inner += (f'<a class="gshoot" data-sid="{sh["id"]}" href="#shoots"><i class="pip"></i>'
+                      f'<span>Shoot · {sh["place"]}</span><span class="gs-t">Planned</span></a>')
     cells.append(f'<div class="{cls}">{inner}</div>')
 while len(cells) % 7: cells.append('<div class="cell blank"></div>')
 grid = "".join(cells)
@@ -124,6 +134,12 @@ n_car, n_reel, n_open, n_ai = cnt("car"), cnt("reel"), cnt("open"), cnt("ai")
 all_ok = wa("✅ Approved: the full October 2026 calendar for Wellknox.")
 all_ch = wa("✏️ Changes needed on the October 2026 calendar.\nWhat to change: ")
 launch = wa("📅 Launch dates for the Financial District and Banjara Hills Rehab branches:\n")
+
+shoot_cards = "".join(
+    f'<div class="shoot" data-sid="{sh["id"]}"><div class="sd"><b>{sh["day"]}</b><span>{dow(sh["day"])}</span></div>'
+    f'<div class="sb"><h4>{sh["place"]}</h4><p class="ss" data-status>Planned</p></div>'
+    f'<button class="btn sbtn" type="button">Mark shoot done</button></div>'
+    for sh in SHOOTS)
 
 pv_data = {str(d): dict(title=p["title"], meta=p["meta"], **p["pv"]) for d, p in P.items() if p.get("pv")}
 
@@ -172,6 +188,28 @@ h1 {{ font-size: clamp(34px, 6vw, 56px); line-height: 1.02; letter-spacing: -.02
 .btn.pv {{ border-color: var(--navy); color: var(--navy); }}
 .btn:hover {{ filter: brightness(1.06); }}
 
+.shoots {{ margin-top: 26px; }}
+.shoots h2 {{ margin: 0; font-size: 24px; }}
+.sh-head {{ display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 10px; }}
+.live {{ font-size: 13px; color: var(--muted); }}
+.live::before {{ content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--slate); margin-right: 7px; }}
+.live.on::before {{ background: var(--teal); }}
+.live:empty {{ display: none; }}
+.sh-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 12px; }}
+.shoot {{ display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 14px; align-items: center; background: var(--surface); border: 1.5px solid var(--amber); border-radius: 14px; padding: 12px 14px; }}
+.shoot.done {{ border-color: var(--teal); background: var(--teal-soft); }}
+.sd {{ display: flex; flex-direction: column; align-items: center; line-height: 1.1; }}
+.sd b {{ font-family: var(--display); font-size: 28px; font-variant-numeric: tabular-nums; }}
+.sd span {{ font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }}
+.sb h4 {{ font-size: 18px; }}
+.ss {{ margin: 2px 0 0; font-size: 14px; color: var(--amber); font-weight: 700; }}
+.shoot.done .ss {{ color: var(--teal); }}
+.shoot.nobtn {{ grid-template-columns: 52px minmax(0, 1fr); }}
+.gshoot {{ display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; font-size: 11px; line-height: 1.25; font-weight: 700; color: var(--amber); background: var(--amber-soft); border-radius: 6px; padding: 5px 7px; text-decoration: none; }}
+.gshoot .pip {{ width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }}
+.gshoot .gs-t {{ flex-basis: 100%; font-weight: 500; color: var(--muted); }}
+.gshoot.done {{ color: var(--teal); background: var(--teal-soft); }}
+.gshoot.done .pip {{ background: var(--teal); }}
 .cal {{ margin-top: 26px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }}
 .dows, .grid {{ display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }}
 .dows div {{ font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 0 4px 6px; }}
@@ -271,6 +309,11 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
     <a class="btn ch" href="{all_ch}" target="_blank" rel="noopener">{PEN}Make changes</a>
   </div>
 
+  <section class="shoots" id="shoots" aria-labelledby="sh-h">
+    <div class="sh-head"><h2 id="sh-h">Shoots this month</h2><span class="live" id="live" role="status"></span></div>
+    <div class="sh-grid">{shoot_cards}</div>
+  </section>
+
   <div class="cal" aria-label="October 2026 calendar">
     <div class="dows">{dow_head}</div>
     <div class="grid">{grid}</div>
@@ -350,6 +393,51 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
   document.getElementById("pvx").addEventListener("click", close);
   dlg.addEventListener("click", function (e) {{ if (e.target === dlg) close(); }});
   dlg.addEventListener("close", clear);
+}})();
+</script>
+<script>
+(function () {{
+  var URL_ = {json.dumps(SHEETS_URL)}, KEY = "wk-shoots-v1", state = {{}};
+  try {{ state = JSON.parse(localStorage.getItem(KEY) || "{{}}"); }} catch (e) {{}}
+  var live = document.getElementById("live");
+  function save() {{ try {{ localStorage.setItem(KEY, JSON.stringify(state)); }} catch (e) {{}} }}
+  function fmt(iso) {{ try {{ return new Date(iso).toLocaleString("en-IN", {{ day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }}); }} catch (e) {{ return ""; }} }}
+  function render() {{
+    document.querySelectorAll("[data-sid]").forEach(function (el) {{
+      var s = state[el.getAttribute("data-sid")] || {{}}, done = s.status === "done";
+      el.classList.toggle("done", done);
+      var st = el.querySelector("[data-status]"); if (st) st.textContent = done ? "Shoot done" + (s.at ? " · " + fmt(s.at) : "") : "Planned";
+      var g = el.querySelector(".gs-t"); if (g) g.textContent = done ? "Done" : "Planned";
+      var b = el.querySelector(".sbtn"); if (b) b.textContent = done ? "Undo" : "Mark shoot done";
+    }});
+  }}
+  function setLive(t, ok) {{ live.textContent = t; live.className = "live" + (ok ? " on" : ""); }}
+  function apply(rows) {{ rows.forEach(function (r) {{ state[r.id] = {{ status: r.status, at: r.at }}; }}); save(); render(); setLive("Live · updated " + fmt(new Date().toISOString()), true); }}
+  function pull() {{
+    return fetch(URL_, {{ cache: "no-store" }}).then(function (r) {{ return r.json(); }})
+      .then(function (j) {{ if (j && j.shoots) apply(j.shoots); }})
+      .catch(function () {{ setLive("Offline, showing the last saved status", false); }});
+  }}
+  function push(id, status) {{
+    state[id] = {{ status: status, at: status === "done" ? new Date().toISOString() : "" }}; save(); render();
+    fetch(URL_, {{ method: "POST", headers: {{ "Content-Type": "text/plain;charset=utf-8" }}, body: JSON.stringify({{ id: id, status: status }}) }})
+      .then(function (r) {{ return r.json(); }})
+      .then(function (j) {{ if (j && j.shoots) apply(j.shoots); else setLive("The sheet did not accept that change", false); }})
+      .catch(function () {{ setLive("Could not reach the sheet. Try again.", false); }});
+  }}
+  if (!URL_) {{
+    document.querySelectorAll(".shoot").forEach(function (c) {{ c.classList.add("nobtn"); var b = c.querySelector(".sbtn"); if (b) b.remove(); }});
+    return;
+  }}
+  document.querySelectorAll(".sbtn").forEach(function (b) {{
+    b.addEventListener("click", function () {{
+      var id = b.closest("[data-sid]").getAttribute("data-sid");
+      push(id, (state[id] && state[id].status === "done") ? "planned" : "done");
+    }});
+  }});
+  render(); setLive("Connecting to the sheet", false); pull();
+  setInterval(function () {{ if (!document.hidden) pull(); }}, 8000);
+  document.addEventListener("visibilitychange", function () {{ if (!document.hidden) pull(); }});
 }})();
 </script>
 """
