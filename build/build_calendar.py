@@ -105,7 +105,7 @@ for d in range(1, 32):
     for sh in SHOOTS:
         if sh["day"] == d:
             inner += (f'<a class="gshoot" data-sid="{sh["id"]}" href="#shoots"><i class="pip"></i>'
-                      f'<span>Shoot · {sh["place"]}</span><span class="gs-t">Planned</span></a>')
+                      f'<span class="gs-n">Shoot · {sh["place"]}</span><span class="gs-t">Planned</span></a>')
     cells.append(f'<div class="{cls}" data-day="{d}">{inner}</div>')
 while len(cells) % 7: cells.append('<div class="cell blank"></div>')
 grid = "".join(cells)
