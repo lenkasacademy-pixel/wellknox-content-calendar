@@ -48,3 +48,4 @@
 .addform input { font: 500 15px var(--body); min-height: 40px; padding: 0 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--ink); }
 #ash-msg { font-size: 13px; color: var(--changes); flex-basis: 100%; }
 #ash-msg:empty { display: none; }
+.ph.th { display: grid; }

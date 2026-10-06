@@ -306,9 +306,36 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
   .row {{ grid-template-columns: 48px 76px minmax(0, 1fr); gap: 12px; padding: 14px; }}
   .th {{ width: 76px; }}
 }}
-@media (max-width: 480px) {{
-  .row {{ grid-template-columns: 56px minmax(0, 1fr); }}
-  .row .th {{ display: none; }}
+@media (max-width: 560px) {{
+  body {{ font-size: 16px; }}
+  .wrap {{ padding-block: 20px 40px; }}
+  .btn {{ min-height: 46px; font-size: 15px; }}
+  .stats {{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }}
+  .stat {{ border-radius: 14px; padding: 8px 12px; font-size: 13px; line-height: 1.25; align-items: center; }}
+  .stat b {{ font-size: 20px; }}
+  .allacts .btn {{ flex: 1 1 100%; }}
+  .sh-head {{ gap: 8px 12px; }}
+  .sh-head .live {{ flex: 1 1 100%; order: 3; }}
+  .shoot {{ grid-template-columns: 48px minmax(0, 1fr); gap: 8px 12px; }}
+  .shoot .sbtn {{ grid-column: 1 / -1; width: 100%; }}
+  .addform label {{ flex: 1 1 100%; }}
+  .addform input {{ width: 100%; min-height: 46px; font-size: 16px; }}
+  .addform .btn {{ flex: 1 1 calc(50% - 6px); }}
+  .week > header {{ padding: 14px; }}
+  .row {{ grid-template-columns: 52px minmax(0, 1fr); gap: 4px 12px; padding: 16px 14px; }}
+  .row .body {{ display: contents; }}
+  .row .when {{ grid-column: 1; grid-row: 1; }}
+  .row .th {{ grid-column: 1; grid-row: 2 / span 2; width: 52px; margin-top: 6px; }}
+  .row .top {{ grid-column: 2; grid-row: 1; margin: 0; }}
+  .row h4 {{ grid-column: 2; grid-row: 2; font-size: 18px; margin-top: 2px; }}
+  .row p {{ grid-column: 2; grid-row: 3; margin: 2px 0 10px; }}
+  .row .acts {{ grid-column: 1 / -1; grid-row: 4; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }}
+  .row .acts .btn {{ width: 100%; padding: 0 8px; }}
+  .row .acts .nopv, .row .acts .lnk {{ grid-column: 1 / -1; text-align: center; }}
+  .row.open .acts .btn.up, .row.ai .acts .btn.up {{ grid-column: 1 / -1; }}
+  dialog {{ width: calc(100vw - 16px); max-height: 96vh; }}
+  .dbody video {{ max-height: 58vh; }}
+  .dfoot .btn {{ flex: 1 1 calc(50% - 4px); }}
 }}
 @media (prefers-reduced-motion: no-preference) {{ .slides {{ scroll-behavior: smooth; }} }}
 </style>
@@ -352,6 +379,18 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
     <div class="grid">{grid}</div>
     <p class="note-past">Tap a post to jump to its details. Oct 1 to 5 are shaded because they have passed.</p>
   </div>
+
+  <h2>The thinking behind October</h2>
+  <p class="sub">Why the month is laid out this way.</p>
+  <div class="cols">
+    <div class="card"><h4>Learn on Thursday</h4><p>One carousel every Thursday: robotic gait, kids rehab, gait suspension and aqua therapy. Each one is a short guide families can save and share, and it explains a therapy in plain words before anyone has to ask.</p></div>
+    <div class="card"><h4>Hear from patients on Friday</h4><p>Fridays from Oct 16 are held for testimonials and patient videos. A guide on Thursday, then a real person the next day. The shoots on Oct 9 and 12 come first, so there is time to edit.</p></div>
+    <div class="card"><h4>Reels with four jobs</h4><p>Brand story (the launch journey and the AI branch introductions), education (6 levels of stroke rehab), emotion (the emotional reel and the Somali patient story) and a lighter skit (30 Din).</p></div>
+    <div class="card"><h4>A four-week arc</h4><p>Week 1 builds trust and shows the technology. Week 2 explains how rehab works. Week 3 shows recovery you can see. Week 4 turns to water therapy and ends the month on emotion.</p></div>
+    <div class="card"><h4>Two branches opening</h4><p>The Financial District reel (Oct 9) and the Banjara Hills reel (Oct 13) build awareness before opening day. The launch journey (Oct 11) shows the track record behind them. Free days are kept for launch-day posts once the dates are fixed.</p></div>
+    <div class="card"><h4>Posts that pair up</h4><p>The stroke reel posted on Oct 6 leads into the gait suspension carousel on Oct 22. The 6 levels reel on Oct 14 leads into the stroke family testimonial on Oct 16.</p></div>
+  </div>
+  <p class="sub" style="margin-top:14px">Nothing goes out unchecked: every post has Preview, Approve and Make changes, and each status is shared live. Patient footage is used only with written consent.</p>
 
   <h2>Week by week</h2>
   <p class="sub">Every post with its idea. Approve or ask for changes on each one.</p>
