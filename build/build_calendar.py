@@ -164,7 +164,13 @@ shoot_cards = "".join(
 
 pv_data = {str(d): dict(title=p["title"], meta=p["meta"], **p["pv"]) for d, p in P.items() if p.get("pv")}
 
-page = f"""<title>Wellknox October Calendar</title>
+page = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Wellknox October Calendar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
@@ -343,6 +349,8 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
 }}
 @media (prefers-reduced-motion: no-preference) {{ .slides {{ scroll-behavior: smooth; }} }}
 </style>
+</head>
+<body>
 <div class="wrap">
   <div class="kick">Wellknox · content plan</div>
   <h1>October 2026</h1>
@@ -475,6 +483,8 @@ dialog::backdrop {{ background: rgba(6, 16, 15, .72); }}
 <script>
 {LIVE_JS}
 </script>
+</body>
+</html>
 """
 open(OUT, "w").write(page)
 import os
