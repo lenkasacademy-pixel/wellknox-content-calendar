@@ -38,8 +38,8 @@ P = {
              idea="A stroke patient's family. Sits right after Wednesday's six-levels explainer."),
     17: dict(k="reel", img="comedy", title="30 Din skit", meta="Reel · 0:51",
              idea="The 30-day patient journey, starting from the Day 1 consultation. A lighter post to end the week.", pv=reel(17)),
-    9:  dict(k="ai", title="Financial District, AI influencer reel", meta="Reel · AI influencer · to be made",
-             idea="An AI influencer introduces the Financial District branch, now open."),
+    9:  dict(k="ai", img="ai-fd", title="Financial District, AI influencer reel", meta="Reel · AI influencer · 0:35",
+             idea="An AI influencer introduces the Financial District branch, now open.", pv=reel(9)),
     20: dict(k="open", title="Open slot", meta="Open slot · footage needed",
              idea="Held for a testimonial or patient video."),
     22: dict(k="car", img="c-gait", title="Gait suspension, quick guide", meta="Carousel · 8 slides",
@@ -128,7 +128,7 @@ def row(d, p):
         acts.append('<button class="lnk" type="button" data-act="pending" hidden>Reset</button>')
     if p["k"] == "open":
         acts.insert(0, '<span class="nopv">Preview opens once footage is in</span>')
-    if p["k"] == "ai":
+    if p["k"] == "ai" and not p.get("pv"):
         acts.insert(0, '<span class="nopv">Preview opens once the reel is made</span>')
     pk = f' data-pkey="{p["key"]}" data-status="pending"' if live else ""
     pill = '<span class="spill" data-pill data-s="pending">Awaiting approval</span>' if live else ""
